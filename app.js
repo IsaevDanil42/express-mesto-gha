@@ -21,8 +21,13 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use('/', users);
-app.use('/', cards);
+app.use('/users', users);
+app.use('/cards', cards);
+app.use('*', (req, res) => {
+  res.status(404).send({
+    message: 'Запрашиваемая страница не существует',
+  });
+});
 
 app.listen(3000, () => {
   console.log(`App listening on port ${3000}`);
