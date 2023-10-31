@@ -1,13 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
 const app = express();
+const NOT_FOUND_CODE = 404;
 
-app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
@@ -24,7 +23,7 @@ app.use((req, res, next) => {
 app.use('/users', users);
 app.use('/cards', cards);
 app.use('*', (req, res) => {
-  res.status(404).send({
+  res.status(NOT_FOUND_CODE).send({
     message: 'Запрашиваемая страница не существует',
   });
 });

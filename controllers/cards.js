@@ -43,14 +43,9 @@ module.exports.deleteCard = (req, res) => {
       return res.send(card);
     })
     .catch((err) => {
-      if (req.params.cardId.length !== 24) {
+      if (err.name === 'CastError') {
         return res.status(ERROR_CODE).send({
           message: 'Переданы некорректные данные',
-        });
-      }
-      if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_CODE).send({
-          message: 'Карточка с указанным _id не найдена',
         });
       }
       return res.status(DEFAULT_ERROR_CODE).send({
@@ -74,14 +69,9 @@ module.exports.likeCard = (req, res) => {
       return res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || req.params.cardId.length !== 24) {
+      if (err.name === 'CastError') {
         return res.status(ERROR_CODE).send({
           message: 'Переданы некорректные данные для постановки лайка',
-        });
-      }
-      if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_CODE).send({
-          message: 'Карточка с указанным _id не найдена',
         });
       }
       return res.status(DEFAULT_ERROR_CODE).send({
@@ -105,7 +95,7 @@ module.exports.dislikeCard = (req, res) => {
       return res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || req.params.cardId.length !== 24) {
+      if (req.params.cardId.length !== 24) {
         return res.status(ERROR_CODE).send({
           message: 'Переданы некорректные данные для снятии лайка',
         });
