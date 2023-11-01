@@ -81,11 +81,6 @@ module.exports.updateAvatar = (req, res) => {
           message: 'Переданы некорректные данные при обновлении аватара',
         });
       }
-      if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_CODE).send({
-          message: 'Пользователь с указанным _id не найден',
-        });
-      }
       return res.status(DEFAULT_ERROR_CODE).send({
         message: 'На сервере произошла ошибка',
       });
