@@ -20,7 +20,14 @@ module.exports.createUser = (req, res, next) => {
         email,
         password: hash,
       })
-        .then((user) => { res.send(user); })
+        .then((user) => {
+          res.send({
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+            email,
+          });
+        })
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
@@ -44,7 +51,10 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+      }
       next(new UnauthorizedError('Передан неверный логин или пароль'));
     });
 };
