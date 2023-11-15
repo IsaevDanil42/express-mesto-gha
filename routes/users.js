@@ -1,16 +1,26 @@
 const users = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
-  createUser, getUsers, getUserById, updateProfile, updateAvatar,
+  getUsers, getUserById, updateProfile, updateAvatar, getUser,
 } = require('../controllers/users');
-
-users.post('', createUser);
 
 users.get('', getUsers);
 
+users.get('/me', getUser);
+
 users.get('/:userId', getUserById);
 
-users.patch('/me', updateProfile);
+users.patch('/me', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+  }),
+}), updateProfile);
 
-users.patch('/me/avatar', updateAvatar);
+users.patch('/me/avatar', celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().pattern((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/)),
+  }),
+}), updateAvatar);
 
 module.exports = users;
