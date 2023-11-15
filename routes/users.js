@@ -8,7 +8,11 @@ users.get('', getUsers);
 
 users.get('/me', getUser);
 
-users.get('/:userId', getUserById);
+users.get('/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24),
+  }),
+}), getUserById);
 
 users.patch('/me', celebrate({
   body: Joi.object().keys({

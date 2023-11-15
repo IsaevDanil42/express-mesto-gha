@@ -55,6 +55,7 @@ module.exports.login = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
       }
+      console.log(err.name);
       next(new UnauthorizedError('Передан неверный логин или пароль'));
     });
 };
@@ -85,7 +86,7 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+        next(new BadRequestError('Переданы некорректные данные'));
       }
       next(err);
     });
